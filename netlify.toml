@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-[build]
-  publish = "."
-  functions = "netlify/functions"
-
-[dev]
-  functions = "netlify/functions"
-  publish = "."
-  port = 8888
-  
-[[redirects]]
-  from = "/.netlify/functions/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-# Redirect /api/chat to the chat function
-[[redirects]]
-  from = "/api/chat"
-  to = "/.netlify/functions/chat"
-  status = 200
-  
-# Redirect /api to the index function
-[[redirects]]
-  from = "/api"
-  to = "/.netlify/functions/index"
-  status = 200
-=======
 [build]
   publish = "."
   functions = "netlify/functions"
@@ -45,4 +18,3 @@
   from = "/api"
   to = "/.netlify/functions/index"
   status = 200
->>>>>>> master
