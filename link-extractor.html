@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Extractor - Multi-Tool Web App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .extractor-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            padding: 32px 28px 28px 28px;
+        }
+        .extractor-container h2 {
+            margin-bottom: 18px;
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        .extractor-container textarea {
+            width: 100%;
+            min-height: 120px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            resize: vertical;
+        }
+        .extractor-container button {
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .extractor-container button:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+        }
+        .links-output {
+            margin-top: 18px;
+            font-size: 0.98rem;
+            word-break: break-all;
+        }
+        .links-output ul {
+            padding-left: 18px;
+        }
+        .links-output li {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="extractor-container">
+        <h2>Link Extractor</h2>
+        <p>Paste any text below. Click "Extract Links" to get all URLs found in the text.</p>
+        <textarea id="inputText" placeholder="Paste your text here..."></textarea>
+        <button id="extractBtn">Extract Links</button>
+        <button id="copyBtn" style="margin-left:10px;display:none;">Copy All</button>
+        <div class="links-output" id="linksOutput"></div>
+    </div>
+    <script>
+    document.getElementById('extractBtn').addEventListener('click', function() {
+        const text = document.getElementById('inputText').value;
+        const output = document.getElementById('linksOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        output.innerHTML = '';
+        // Regex for URLs (http, https, ftp)
+        const urlRegex = /(https?:\/\/|ftp:\/\/)[^\s"'<>]+/gi;
+        const links = text.match(urlRegex);
+        if (links && links.length) {
+            output.innerHTML = `<b>Found ${links.length} link(s):</b><ul>` +
+                links.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('') + '</ul>';
+            copyBtn.style.display = '';
+            copyBtn.onclick = function() {
+                navigator.clipboard.writeText(links.join('\n'));
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => copyBtn.textContent = 'Copy All', 1200);
+            };
+        } else {
+            output.innerHTML = '<span style="color:#e74c3c">No links found.</span>';
+            copyBtn.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>

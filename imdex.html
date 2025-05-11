@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Image Resizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #3498db;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="imdex.html">Image Resizer</a>
+            <a href="rewriter.html">Text Rewriter</a>
+        </nav>
+        
+        <h1>Bulk Image Resizer</h1>
+        <p>Resize multiple images at once, right in your browser</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-message">
+                <img src="upload-icon.svg" alt="Upload">
+                <p>Drag & drop images here or click to select</p>
+            </div>
+            <input type="file" id="fileInput" multiple accept="image/*" hidden>
+        </div>
+        
+        <div class="settings-panel">
+            <!-- Width/height settings -->
+            <div class="dimension-controls">
+                <label>Width: <input type="number" id="width" value="800"> px</label>
+                <label>Height: <input type="number" id="height" value="600"> px</label>
+                <label><input type="checkbox" id="maintainAspect" checked> Maintain aspect ratio</label>
+            </div>
+            
+            <!-- Format options -->
+            <div class="format-controls">
+                <label>Output format:
+                    <select id="format">
+                        <option value="jpeg">JPEG</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WEBP</option>
+                    </select>
+                </label>
+                <label>Quality: <input type="range" id="quality" min="1" max="100" value="90"></label>
+            </div>
+            
+            <button id="processBtn" class="primary-btn">Process Images</button>
+        </div>
+        
+        <div class="preview-area" id="previewArea"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

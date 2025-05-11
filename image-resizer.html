@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer | Multi-Tool Web App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .logo img {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .logo span {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+        
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        .nav-btn.active {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .home-btn {
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        .home-btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .home-btn svg {
+            margin-right: 8px;
+        }
+        
+        .upload-section {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        
+        .left-panel {
+            width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .right-panel {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            min-width: 0; /* Important for flexbox children */
+        }
+        
+        .resize-settings {
+            background-color: var(--card-bg);
+            border-radius: 5px;
+        }
+        
+        .resize-settings h2 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .resize-settings h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .dimension-group {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .dimension-label {
+            width: 60px;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .dimension-input {
+            flex: 1;
+        }
+        
+        input[type="number"], 
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+        
+        .unit-selector {
+            width: 60px;
+            padding: 8px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+        
+        .unit-selector:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+        
+        .aspect-ratio {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .aspect-ratio input {
+            margin-right: 10px;
+        }
+        
+        .aspect-ratio label {
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .export-settings {
+            margin-top: 30px;
+        }
+        
+        .export-settings h3 {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .export-input {
+            margin-bottom: 15px;
+        }
+        
+        .export-input select {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+        
+        .export-input select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+        
+        .export-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+        }
+        
+        .export-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(52, 152, 219, 0.25);
+        }
+        
+        .upload-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            border: 2px dashed var(--border-color);
+            margin-bottom: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: var(--bg-color);
+        }
+        
+        .upload-btn:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .image-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow-color);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .image-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .image-action {
+            background-color: rgba(255,255,255,0.9);
+            border: none;
+            color: var(--text-color);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-action:hover {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .image-details {
+            padding: 10px;
+        }
+        
+        .image-name {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .image-size {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+        
+        .size-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+        
+        .size-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .upload-section {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .left-panel {
+                width: 100%;
+            }
+            
+            .right-panel {
+                width: 100%;
+            }
+            
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .navbar {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                margin-top: 10px;
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+            
+            .nav-btn {
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .upload-btn {
+                padding: 20px;
+            }
+            
+            .dimension-group {
+                flex-wrap: wrap;
+            }
+            
+            .dimension-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            .tab-buttons {
+                overflow-x: auto;
+            }
+            
+            .tab-btn {
+                min-width: 100px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="nav-wrapper">
+                <nav>
+                    <a href="index.html" class="home-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Home
+                    </a>
+                    <a href="image-resizer.html" class="active">Image Resizer</a>
+                    <a href="text-rewriter.html">Text Rewriter</a>
+                    <a href="color-picker.html">Color Picker</a>
+                    <a href="file-converter.html">File Converter</a>
+                </nav>
+                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon" style="display: none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="page-header">
+            <h1>Bulk Image Resizer</h1>
+            <p>Resize multiple images at once, right in your browser</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="left-panel">
+                <button class="upload-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Drag & drop images here or click to select</p>
+                </button>
+                <div class="file-size">Max file size: 10 MB</div>
+
+                <div class="resize-settings">
+                    <h2>Resize Settings</h2>
+                    
+                    <div class="tab-buttons">
+                        <button class="tab-btn active">By Size</button>
+                        <button class="tab-btn">As Percentage</button>
+                        <button class="tab-btn">Social Media</button>
+                    </div>
+                    
+                    <div class="dimension-group">
+                        <div class="dimension-label">Width</div>
+                        <div class="dimension-input">
+                            <input type="number" value="800">
+                        </div>
+                        <select class="unit-selector">
+                            <option>px</option>
+                        </select>
+                    </div>
+                    
+                    <div class="dimension-group">
+                        <div class="dimension-label">Height</div>
+                        <div class="dimension-input">
+                            <input type="number" value="800">
+                        </div>
+                        <select class="unit-selector">
+                            <option>px</option>
+                        </select>
+                    </div>
+                    
+                    <div class="aspect-ratio">
+                        <input type="checkbox" id="lockAspect" checked>
+                        <label for="lockAspect">Lock Aspect Ratio</label>
+                    </div>
+                    
+                    <div class="export-settings">
+                        <h3>Export Settings <span>▼</span></h3>
+                        
+                        <div class="export-input">
+                            <div class="dimension-label">Target File Size (optional)</div>
+                            <input type="text" placeholder="Enter size">
+                            <select class="unit-selector">
+                                <option>KB</option>
+                            </select>
+                            <div class="file-size">Set a max output file size. Only works for JPG files</div>
+                        </div>
+                        
+                        <div class="export-input">
+                            <div class="dimension-label">Save Image As</div>
+                            <select>
+                                <option>Original</option>
+                                <option>JPG</option>
+                                <option>PNG</option>
+                                <option>WEBP</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="export-btn">
+                        Export
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="image-grid" id="imageGrid">
+                    <!-- Images will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            
+            // Check for saved theme preference or use system preference
+            const savedTheme = localStorage.getItem('theme') || 
+                               (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            
+            // Apply the saved theme
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Theme toggle button event
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
