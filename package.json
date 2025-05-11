@@ -1,17 +1,13 @@
-{
-  "name": "multi-web-tools",
+{  "name": "multi-web-tools",
   "version": "1.0.0",
-  "description": "Multi Web Tools application with AI chatbot and various web utilities",
+  "description": "Essential web tools with AI chatbot",
   "scripts": {
-    "start": "node groq-proxy.js",
-    "dev": "netlify dev"
+    "start": "netlify dev",
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "groq-sdk": "^0.21.0",
-    "node-fetch": "^3.3.2"
+    "groq-sdk": "^0.21.0"
   },
   "devDependencies": {
     "netlify-cli": "^17.38.1"
