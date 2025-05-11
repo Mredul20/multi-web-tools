@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @echo off
 echo Starting Groq API Proxy Server...
 start cmd /k "node groq-proxy.js"
@@ -6,3 +7,13 @@ timeout /t 2 /nobreak
 echo Opening chatbot in browser...
 start "" "chatbot.html"
 echo If the chatbot doesn't open automatically, please open chatbot.html directly in your browser
+=======
+@echo off
+echo Starting Groq API Proxy Server...
+start cmd /k "node groq-proxy.js"
+echo Wait for server to start...
+timeout /t 2 /nobreak
+echo Opening chatbot in browser...
+start "" "chatbot.html"
+echo If the chatbot doesn't open automatically, please open chatbot.html directly in your browser
+>>>>>>> master
